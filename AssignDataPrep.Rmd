@@ -1,0 +1,149 @@
+---
+title: "Assignment4_DataPrep"
+author: "Priya Akhil Goyal"
+date: "8/6/2021"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Business Problem
+The business problem that we are trying to resolve in this project is credit card fraud detection. It is important for credit card companies to identify any fraudelent transaction made  on an accout so that the customers are chaarged only for the items or services they actually purchased.
+
+## Dataset origin
+To do the analysis, we are using a dataset that contains various credit card transactions made by various card holders in European countries in the month september of the year 2013, that contains a mix of fraud as well as non-fraudulent transactions and are marked accordingly. The dataset has been collected and analysed during a research collaboration of Worldline and the Machine Learning Group (http://mlg.ulb.ac.be) of ULB (Université Libre de Bruxelles) on big data mining and fraud detection.
+
+## Importing dataset
+```{r credit card transactions}
+library(ranger)
+library(caret)
+
+library(data.table)
+creditcard_data <- read.csv("creditcard.csv")
+```
+
+## Dataset exploration
+
+```{r data exploration}
+
+nrow(creditcard_data)           #shows number of rows in data
+dim(creditcard_data)            #shows number of rows and columns in dataset
+head(creditcard_data, 5)        #display top 5 rows
+tail(creditcard_data, 5)        #display end 5 rows
+colnames(x = creditcard_data)   #shows all column names
+table(creditcard_data$Class)    #shows how many are marked as fraud and how many are genuine
+summary(creditcard_data$Amount) #shows min, max, and summary values for the Amount column  
+names(creditcard_data)          #display names of all the columns
+
+
+```
+This dataset presents transactions that occurred in two days, where we have 492 frauds out of 284,807 transactions. The dataset is highly unbalanced, the positive class (frauds) account for 0.172% of all transactions.
+
+It contains only numerical input variables which are the result of a PCA transformation. Unfortunately, due to confidentiality issues, we cannot provide the original features and more background information about the data. Features V1, V2, … V28 are the principal components obtained with PCA, the only features which have not been transformed with PCA are 'Time' and 'Amount'. Feature 'Time' contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature 'Amount' is the transaction Amount, this feature can be used for example-dependant cost-sensitive learning. Feature 'Class' is the response variable and it takes value 1 in case of fraud and 0 otherwise.
+
+## Data Preparation
+
+check for any NULL values in the dataset.
+
+```{r data prep 1}
+
+nullTime <- creditcard_data[creditcard_data$Time == "null", ]
+head(nullTime, 5)
+
+nullAmount <- creditcard_data[creditcard_data$Amount == "null", ]
+head(nullAmount, 5)
+
+nullClass <- creditcard_data[creditcard_data$Class == "null", ]
+head(nullClass, 5)
+
+```
+
+We will scale our data using the **scale()** function. We will apply this to the amount component of our creditcard_data amount. Scaling is also known as feature standardization. With the help of scaling, the data is structured according to a specified range. Therefore, there are no extreme values in our dataset that might interfere with the functioning of our model. 
+
+```{r data prep2}
+
+creditcard_data$Amount=scale(creditcard_data$Amount)
+head(creditcard_data, 5) 
+tail(creditcard_data, 5)
+summary(creditcard_data$Amount)
+
+NewData1 <- creditcard_data[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+NewData1 <- NewData1[,-c(2)]
+
+head(NewData1)
+dim(NewData1)
+
+NewData=creditcard_data[,-c(1)]
+head(NewData)
+
+```
+
+## Data Modelling
+
+We will **split** our dataset into training set as well as test set with a split ratio of 0.80. This means that 80% of our data will be attributed to the **train_data** whereas 20% will be attributed to the **test_data**.
+
+```{r data modelling}
+
+library(caTools)
+set.seed(123)
+data_sample = sample.split(NewData$Class,SplitRatio=0.80)
+train_data = subset(NewData,data_sample==TRUE)
+test_data = subset(NewData,data_sample==FALSE)
+dim(train_data)
+dim(test_data)
+
+```
+
+## Code and graphs
+#### Logistic Regression
+
+A logistic regression is used for modeling the outcome probability of a class such as pass/fail, positive/negative and in our case – fraud/not fraud.
+
+```{r logistic regression}
+
+Logistic_Model=glm(Class~.,test_data,family=binomial())
+summary(Logistic_Model)
+
+```
+
+#### Plots
+
+We will visual it through the following plots:
+```{r data graph}
+
+plot(Logistic_Model)
+
+```
+We learnt how to develop our credit card fraud detection model using machine learning. We used a Logistic Regression to implement this model and also plotted the respective performance curves for the model. We learnt how data can be analyzed and visualized to discern fraudulent transactions from other types of data.
