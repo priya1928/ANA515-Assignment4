@@ -1,13 +1,8 @@
 # ANA515-Assignment4
 
-## Credit Card Fraud Detection Dataset
-The dataset contains transactions made by credit cards, they are labeled as fraudulent or genuine. This is important for companies that have transaction systems to build a model for detecting fraudulent activities.
+## Credit Card Fraud Detection
+The business problem that we are trying to resolve in this project is credit card fraud detection. It is important for credit card companies to identify any fraudelent transaction made  on an account so that the customers are chaarged only for the items or services they actually purchased.
 
 ### Data Link: 
 https://www.kaggle.com/mlg-ulb/creditcardfraud
 
-### Data Science Project Idea: 
-Implement different algorithms like decision trees, logistic regression, and artificial neural networks to see which gives better accuracy. Compare the results of each algorithm and understand the behavior of models.
-
-### Referal Source Code: 
-https://data-flair.training/blogs/data-science-machine-learning-project-credit-card-fraud-detection/
